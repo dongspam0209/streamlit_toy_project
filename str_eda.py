@@ -16,24 +16,23 @@ pymysql.install_as_MySQLdb()
 
 load_dotenv()
 
-# st.secrets
-# engine = create_engine(
-#     f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@"
-#     f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}?charset={os.getenv('DB_CHARSET')}",
-#     echo=True
-# )
-
-db_user = st.secrets["database"]["user"]
-db_password = st.secrets["database"]["password"]
-db_host = st.secrets["database"]["host"]
-db_port = st.secrets["database"]["port"]
-db_name = st.secrets["database"]["database"]
-
 engine = create_engine(
-    f"mysql+pymysql://{db_user}:{db_password}@"
-    f"{db_host}:{db_port}/{db_name}",
+    f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@"
+    f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}?charset={os.getenv('DB_CHARSET')}",
     echo=True
 )
+
+# db_user = st.secrets["database"]["user"]
+# db_password = st.secrets["database"]["password"]
+# db_host = st.secrets["database"]["host"]
+# db_port = st.secrets["database"]["port"]
+# db_name = st.secrets["database"]["database"]
+
+# engine = create_engine(
+#     f"mysql+pymysql://{db_user}:{db_password}@"
+#     f"{db_host}:{db_port}/{db_name}",
+#     echo=True
+# )
 
 @st.cache_data
 def load_data():
@@ -60,8 +59,11 @@ df_utterances_info['keyword_id']=df_utterances_info['keyword_id'].map(keyword_di
 
 ####
 
-plt.rcParams['font.family'] = 'NanumGothic'
-plt.rcParams['axes.unicode_minus'] =False
+from matplotlib import font_manager as fm
+fpath=os.path.join(os.getcwd(),"Nanum_Gothic/NanumGothic-Regular.ttf")
+prop=fm.FontProperties(fname=fpath)
+# plt.rcParams['font.family'] = 'NanumGothic'
+# plt.rcParams['axes.unicode_minus'] =False
 
 st.title("Multi-turn SNS data")
 
@@ -88,7 +90,7 @@ for i,bar in enumerate(bars):
              weight='bold')
 
 ax.set_xticks(range(len(info_topic_group.index)))    
-ax.set_xticklabels(info_topic_group.index, rotation=60, fontsize=14)  # fontsize를 조정하여 글자 크기 설정
+ax.set_xticklabels(info_topic_group.index, rotation=60, fontsize=14,fontproperties=prop)  # fontsize를 조정하여 글자 크기 설정
 ax.set_ylabel("Count",fontsize=14)
 
 st.pyplot(fig)
@@ -107,8 +109,9 @@ if selected_topic:
     ax.barh(keyword_counts.index, keyword_counts.values,
             color='royalblue', edgecolor='black', linewidth=1)
     ax.set_xlabel("Count",fontsize=14)
-    ax.set_title(f"Top 5 Keywords for Topic : {selected_topic}")
+    ax.set_title(f"Top 5 Keywords for Topic : {selected_topic}",fontproperties=prop)
     ax.spines[['top', 'right']].set_visible(False)
+    ax.set_yticklabels(keyword_counts.index,fontsize=14,fontproperties=prop)
     plt.grid(True, axis='x',linestyle='--')
 
     st.pyplot(fig)
@@ -129,7 +132,7 @@ axes[0].set_title('sex',fontsize=14)
 axes[0].set_xlabel('sex',fontsize=14)
 axes[0].set_ylabel('count',fontsize=14)
 axes[0].set_xticks(range(len(sex_group.index)))    
-axes[0].set_xticklabels(sex_group.index, fontsize=14)  # fontsize를 조정하여 글자 크기 설정
+axes[0].set_xticklabels(sex_group.index, fontsize=14,fontproperties=prop)  # fontsize를 조정하여 글자 크기 설정
 
 
 bins=[10,20,30,40,50,60,70]
@@ -169,13 +172,13 @@ utterances_no_count=session_utterances_no_max.value_counts()
 axes[0].bar(turn_count.index,turn_count)
 axes[0].set_xlim(0,12)
 axes[0].set_title("Turn counts",fontsize=14)
-axes[0].set_xlabel("대화세션당 Turn 수",fontsize=14)
+axes[0].set_xlabel("대화세션당 Turn 수",fontsize=14,fontproperties=prop)
 axes[0].set_ylabel("Counts",fontsize=14)
 
 axes[1].bar(utterances_no_count.index,utterances_no_count)
 axes[1].set_xlim(0,30)
 axes[1].set_title("utterances counts",fontsize=14)
-axes[1].set_xlabel("대화세션당 발화 수",fontsize=14)
+axes[1].set_xlabel("대화세션당 발화 수",fontsize=14,fontproperties=prop)
 
 st.pyplot(fig)
 
