@@ -16,12 +16,12 @@ pymysql.install_as_MySQLdb()
 
 load_dotenv()
 
-st.secrets
-engine = create_engine(
-    f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@"
-    f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}?charset={os.getenv('DB_CHARSET')}",
-    echo=True
-)
+# st.secrets
+# engine = create_engine(
+#     f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@"
+#     f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}?charset={os.getenv('DB_CHARSET')}",
+#     echo=True
+# )
 
 db_user = st.secrets["database"]["user"]
 db_password = st.secrets["database"]["password"]
