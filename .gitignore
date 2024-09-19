@@ -4,3 +4,4 @@ venv/
 table/
 gpt_api_test result/
 012.한국어 SNS 멀티턴 대화 데이터/
+*.env
